@@ -80,26 +80,32 @@ document.getElementById("sair").addEventListener("click", () => {
 });
 
 // Configuração para exibir ou ocultar a interface
-// Exibir Resultado
+// Listener para eventos recebidos via NUI
 window.addEventListener("message", (event) => {
+  // Identifica a ação enviada pelo servidor ou NUI
   switch (event.data.action) {
     case "showUI":
+      // Exibe a interface principal do jogo
       document.getElementById("gameContainer").style.display = "block";
       break;
 
     case "hideUI":
+      // Oculta a interface principal do jogo
       document.getElementById("gameContainer").style.display = "none";
       break;
 
     case "showResult":
+      // Exibe o resultado do jogo usando o SweetAlert
       Swal.fire({
-        title: event.data.title,
-        html: event.data.message,
+        title: event.data.title, // Título fornecido pelo evento
+        html: event.data.message, // Mensagem formatada fornecida pelo evento
       }).then(() => {
-        // Fecha a interface após o resultado
+        // Após o usuário fechar o alerta, esconde a interface do jogo
         fetch(`https://${GetParentResourceName()}/hideUI`, { method: "POST" })
           .then(() => {
+            // Oculta o container principal
             document.getElementById("gameContainer").style.display = "none";
+            // Remove o foco do NUI
             fetch(`https://${GetParentResourceName()}/nuiFocus`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -107,12 +113,60 @@ window.addEventListener("message", (event) => {
             });
           })
           .catch((error) => {
+            // Loga qualquer erro ao tentar ocultar a interface
             console.error("Erro ao ocultar a interface:", error);
           });
       });
       break;
 
+    case "showAnimation":
+      // Inicia a animação de sorteio com os prêmios recebidos
+      showRotatingAnimation(event.data.prizes);
+      break;
+
+    case "historico":
+      // Exibe o histórico de apostas recebido do servidor
+      const data = event.data.data;
+      console.log(data); // Debug: Verifica os dados recebidos do servidor
+
+      const tableBody = document.querySelector("#historicoTable tbody");
+      tableBody.innerHTML = ""; // Limpa a tabela antes de adicionar novas linhas
+
+      if (Array.isArray(data) && data.length > 0) {
+        // Itera pelos dados do histórico e adiciona linhas à tabela
+        data.forEach((entry) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+              <td>${new Date(
+                entry.data_aposta
+              ).toLocaleDateString()}</td> <!-- Data formatada -->
+              <td>${getBichoNome(
+                entry.bicho_escolhido
+              )}</td> <!-- Nome do bicho escolhido -->
+              <td>${formatCurrency(
+                entry.valor_aposta
+              )}</td> <!-- Valor apostado -->
+              <td>${getBichoNome(entry.premio_1)}, ${getBichoNome(
+            entry.premio_2
+          )}, ${getBichoNome(entry.premio_3)}</td> <!-- Prêmios sorteados -->
+              <td>${entry.resultado}</td> <!-- Resultado da aposta -->
+              <td>${formatCurrency(entry.valor_ganho)}</td> <!-- Valor ganho -->
+            `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        // Caso não haja histórico, exibe uma mensagem indicando que está vazio
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="6">Nenhum histórico encontrado.</td>`;
+        tableBody.appendChild(row);
+      }
+
+      // Alterna a exibição para o container do histórico
+      toggleContainers("historicoContainer");
+      break;
+
     default:
+      // Loga uma ação desconhecida para ajudar no debug
       console.warn("Ação desconhecida:", event.data.action);
       break;
   }
@@ -246,13 +300,6 @@ function showRotatingAnimation(prizes) {
   }, 6000); // 6 segundos
 }
 
-// Receber os prêmios sorteados do servidor
-window.addEventListener("message", (event) => {
-  if (event.data.action === "showAnimation") {
-    showRotatingAnimation(event.data.prizes);
-  }
-});
-
 // Evento para o botão "Exibir Histórico"
 document.getElementById("exibirHistorico").addEventListener("click", () => {
   // Envia solicitação ao servidor para obter o histórico
@@ -268,41 +315,6 @@ document.getElementById("exibirHistorico").addEventListener("click", () => {
         icon: "error",
       });
     });
-});
-
-// Receber histórico do servidor
-window.addEventListener("message", (event) => {
-  if (event.data.action === "historico") {
-    const data = event.data.data;
-    console.log(data); // Verificar os dados recebidos do servidor
-
-    const tableBody = document.querySelector("#historicoTable tbody");
-    tableBody.innerHTML = ""; // Limpa tabela
-
-    if (Array.isArray(data) && data.length > 0) {
-      data.forEach((entry) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-    <td>${new Date(entry.data_aposta).toLocaleDateString()}</td>
-    <td>${getBichoNome(entry.bicho_escolhido)}</td>
-    <td>${formatCurrency(entry.valor_aposta)}</td>
-    <td>${getBichoNome(entry.premio_1)}, ${getBichoNome(
-          entry.premio_2
-        )}, ${getBichoNome(entry.premio_3)}</td>
-    <td>${entry.resultado}</td>
-    <td>${formatCurrency(entry.valor_ganho)}</td>
-`;
-        tableBody.appendChild(row);
-      });
-    } else {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td colspan="5">Nenhum histórico encontrado.</td>`;
-      tableBody.appendChild(row);
-    }
-
-    // Alterna para o container do histórico
-    toggleContainers("historicoContainer");
-  }
 });
 
 // Voltar para tela de apostas
