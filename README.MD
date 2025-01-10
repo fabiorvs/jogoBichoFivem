@@ -16,3 +16,12 @@ Este é um recurso para servidores FiveM que implementa o clássico Jogo do Bich
     - Notificações claras para erros e interações.
 - Sistema de Componentes e Props para NPCs:
     - Customização visual dos NPCs com roupas e acessórios.
+## Screenshots
+
+![Print 1](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/1.png)
+
+![Print 2](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/2.png)
+
+![Print 3](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/3.png)
+
+![Print 4](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/4.png)
