@@ -28,3 +28,40 @@ Config.Bichos = {
     [24] = "Veado",
     [25] = "Vaca"
 }
+
+-- Array Multiplicadores
+Config.multiplicadores = {10, 5, 2}
+
+-- Array NPCS
+Config.npcs = {{
+    position = vector3(-267.0, -959.0, 31.2), -- Coordenadas do NPC
+    model = "g_f_importexport_01", -- Modelo do NPC
+    heading = 337.0, -- Rotação do NPC
+    blipName = "Jogo do Bicho", -- Nome do Blip
+    tableModel = "prop_astro_table_01", -- Modelo da mesa
+    tableOffset = vector3(0.0, 1.0, 0.0) -- Posição da mesa em relação ao NPC
+}, {
+    position = vector3(300.0, -500.0, 43.35), -- Outra posição
+    model = "g_m_importexport_01", -- Outro modelo de NPC
+    heading = 337.0, -- Rotação do NPC
+    blipName = "Jogo do Bicho", -- Nome do Blip
+    tableModel = "prop_astro_table_01", -- Modelo da mesa
+    tableOffset = vector3(0.0, 1.0, 0.0) -- Posição da mesa em relação ao NPC
+}, {
+    position = vector3(-2570.28, 2789.27, 3.6), -- Outra posição
+    model = "a_m_m_golfer_01", -- Outro modelo de NPC
+    heading = 337.0, -- Rotação do NPC
+    blipName = "Jogo do Bicho", -- Nome do Blip
+    tableModel = "prop_astro_table_01", -- Modelo da mesa
+    tableOffset = vector3(0.0, 1.0, 0.0) -- Posição da mesa em relação ao NPC
+}}
+
+-- Array Aniations
+Config.animations = {
+    "WORLD_HUMAN_SMOKING", 
+    "WORLD_HUMAN_CLIPBOARD",
+     "WORLD_HUMAN_STAND_IMPATIENT",
+    "WORLD_HUMAN_DRINKING", 
+    "WORLD_HUMAN_AA_SMOKE",
+    "WORLD_HUMAN_AA_COFFEE"
+}

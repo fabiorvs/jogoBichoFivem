@@ -23,7 +23,6 @@ document.getElementById("apostar").addEventListener("click", () => {
 
   if (!bichoSelecionado) {
     Swal.fire({
-      icon: "error",
       title: "Erro",
       text: "Selecione um bicho para apostar!",
     });
@@ -32,7 +31,6 @@ document.getElementById("apostar").addEventListener("click", () => {
 
   if (!valor || valor <= 0) {
     Swal.fire({
-      icon: "error",
       title: "Erro",
       text: "Insira um valor válido para apostar!",
     });
@@ -59,7 +57,6 @@ document.getElementById("apostar").addEventListener("click", () => {
     .catch((error) => {
       console.error("Erro ao registrar aposta:", error);
       Swal.fire({
-        icon: "error",
         title: "Erro",
         text: "Ocorreu um problema ao registrar a aposta. Tente novamente mais tarde.",
       });
@@ -96,7 +93,6 @@ window.addEventListener("message", (event) => {
 
     case "showResult":
       Swal.fire({
-        icon: event.data.icon,
         title: event.data.title,
         html: event.data.message,
       }).then(() => {
