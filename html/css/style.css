@@ -1,0 +1,125 @@
+:root {
+    --primary-color: #4caf50;
+    --secondary-color: #333;
+    --button-hover-color: #45a049;
+    --selected-color: #ffa500;
+    --text-color: #fff;
+    --font-family: 'Arial', sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+h1 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.bicho-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.bicho-button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1 0 30%;
+    max-width: 100px;
+    text-align: center;
+    position: relative;
+}
+
+.bicho-button img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.bicho-button span {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    color: var(--text-color);
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.bicho-button:hover {
+    background-color: var(--button-hover-color);
+}
+
+.bicho-button.selected {
+    background-color: var(--selected-color);
+}
+
+.input-group {
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(100% - 22px);
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 15px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 18px;
+    color: var(--secondary-color);
+}
+
+.exit-button {
+    background-color: #ff4c4c;
+    margin-top: 20px;
+}
+
+.exit-button:hover {
+    background-color: #e63939;
+}

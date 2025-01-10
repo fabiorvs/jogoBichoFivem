@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo do Bicho</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container" id="gameContainer">
+        <h1>Jogo do Bicho</h1>
+        <div class="bicho-container">
+            <button class="bicho-button" data-bicho="1">
+                <img src="imagens/1.png" alt="Avestruz">
+                <span>Avestruz</span>
+            </button>
+            <button class="bicho-button" data-bicho="2">
+                <img src="imagens/2.png" alt="Águia">
+                <span>Águia</span>
+            </button>
+            <button class="bicho-button" data-bicho="3">
+                <img src="imagens/3.png" alt="Burro">
+                <span>Burro</span>
+            </button>
+            <button class="bicho-button" data-bicho="4">
+                <img src="imagens/4.png" alt="Cachorro">
+                <span>Cachorro</span>
+            </button>
+            <button class="bicho-button" data-bicho="5">
+                <img src="imagens/5.png" alt="Veado">
+                <span>Veado</span>
+            </button>
+            <button class="bicho-button" data-bicho="6">
+                <img src="imagens/6.png" alt="Cabra">
+                <span>Cabra</span>
+            </button>
+            <button class="bicho-button" data-bicho="7">
+                <img src="imagens/7.png" alt="Carneiro">
+                <span>Carneiro</span>
+            </button>
+            <button class="bicho-button" data-bicho="8">
+                <img src="imagens/8.png" alt="Camelo">
+                <span>Camelo</span>
+            </button>
+            <button class="bicho-button" data-bicho="9">
+                <img src="imagens/9.png" alt="Cobra">
+                <span>Cobra</span>
+            </button>
+            <button class="bicho-button" data-bicho="10">
+                <img src="imagens/10.png" alt="Coelho">
+                <span>Coelho</span>
+            </button>
+            <button class="bicho-button" data-bicho="11">
+                <img src="imagens/11.png" alt="Cavalo">
+                <span>Cavalo</span>
+            </button>
+            <button class="bicho-button" data-bicho="12">
+                <img src="imagens/12.png" alt="Elefante">
+                <span>Elefante</span>
+            </button>
+            <button class="bicho-button" data-bicho="13">
+                <img src="imagens/13.png" alt="Galo">
+                <span>Galo</span>
+            </button>
+            <button class="bicho-button" data-bicho="14">
+                <img src="imagens/14.png" alt="Gato">
+                <span>Gato</span>
+            </button>
+            <button class="bicho-button" data-bicho="15">
+                <img src="imagens/15.png" alt="Jacaré">
+                <span>Jacaré</span>
+            </button>
+            <button class="bicho-button" data-bicho="16">
+                <img src="imagens/16.png" alt="Leão">
+                <span>Leão</span>
+            </button>
+            <button class="bicho-button" data-bicho="17">
+                <img src="imagens/17.png" alt="Macaco">
+                <span>Macaco</span>
+            </button>
+            <button class="bicho-button" data-bicho="18">
+                <img src="imagens/18.png" alt="Porco">
+                <span>Porco</span>
+            </button>
+            <button class="bicho-button" data-bicho="19">
+                <img src="imagens/19.png" alt="Pavão">
+                <span>Pavão</span>
+            </button>
+            <button class="bicho-button" data-bicho="20">
+                <img src="imagens/20.png" alt="Peru">
+                <span>Peru</span>
+            </button>
+            <button class="bicho-button" data-bicho="21">
+                <img src="imagens/21.png" alt="Touro">
+                <span>Touro</span>
+            </button>
+            <button class="bicho-button" data-bicho="22">
+                <img src="imagens/22.png" alt="Tigre">
+                <span>Tigre</span>
+            </button>
+            <button class="bicho-button" data-bicho="23">
+                <img src="imagens/23.png" alt="Urso">
+                <span>Urso</span>
+            </button>
+            <button class="bicho-button" data-bicho="24">
+                <img src="imagens/24.png" alt="Veado">
+                <span>Veado</span>
+            </button>
+            <button class="bicho-button" data-bicho="25">
+                <img src="imagens/25.png" alt="Vaca">
+                <span>Vaca</span>
+            </button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="valor" placeholder="Insira o valor da aposta ($)" min="1">
+        </div>
+        <button id="apostar">Apostar</button>
+        <div class="result" id="result"></div>
+        <button class="exit-button" id="sair">Sair</button>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mask.js"></script>
+    <script src="js/sweetalert2.all.min.js" type="text/javascript"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
