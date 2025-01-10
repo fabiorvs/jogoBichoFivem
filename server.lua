@@ -46,12 +46,14 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
 
     if user_id then
         if not valor or tonumber(valor) <= 0 then
-            TriggerClientEvent("jogoBicho:resultado", source, false, "O valor da aposta deve ser maior que zero!", {}, "Nenhum")
+            TriggerClientEvent("jogoBicho:resultado", source, false, "O valor da aposta deve ser maior que zero!", {},
+                "Nenhum")
             return
         end
 
         if not bicho or tonumber(bicho) < 1 or tonumber(bicho) > 25 then
-            TriggerClientEvent("jogoBicho:resultado", source, false, "Número do bicho inválido! Escolha um número entre 1 e 25.", {}, "Nenhum")
+            TriggerClientEvent("jogoBicho:resultado", source, false,
+                "Número do bicho inválido! Escolha um número entre 1 e 25.", {}, "Nenhum")
             return
         end
 
@@ -78,11 +80,7 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             end
 
             -- Enviar os bichos sorteados para a animação no cliente
-            local sorteadosNomes = {
-                bichos[sorteados[1]],
-                bichos[sorteados[2]],
-                bichos[sorteados[3]]
-            }
+            local sorteadosNomes = {bichos[sorteados[1]], bichos[sorteados[2]], bichos[sorteados[3]]}
 
             TriggerClientEvent("jogoBicho:exibirSorteio", source, sorteadosNomes)
 
@@ -109,12 +107,15 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             if premio > 0 then
                 vRP.giveMoney(user_id, premio)
                 local premioFormatado = formatBRL(premio)
-                TriggerClientEvent("jogoBicho:resultado", source, true, "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
+                TriggerClientEvent("jogoBicho:resultado", source, true,
+                    "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
             else
-                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.", sorteadosNomes, "Nenhum")
+                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.",
+                    sorteadosNomes, "Nenhum")
             end
         else
-            TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!", {}, "Nenhum")
+            TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!",
+                {}, "Nenhum")
         end
     else
         TriggerClientEvent("jogoBicho:resultado", source, false, "Erro ao identificar o jogador.", {}, "Nenhum")
