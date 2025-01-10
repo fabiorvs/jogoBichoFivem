@@ -7,23 +7,37 @@ cRP = {}
 Tunnel.bindInterface("jogoBicho", cRP)
 vSERVER = Tunnel.getInterface("jogoBicho")
 
--- Lista de NPCs
+-- Lista de NPCs e Mesas
 local npcs = {
     {
         position = vector3(-267.0, -959.0, 31.2), -- Coordenadas do NPC
         model = "g_f_importexport_01", -- Modelo do NPC
-        blipName = "Jogo do Bicho" -- Nome do Blip
+        heading = 337.0, -- Rotação do NPC
+        blipName = "Jogo do Bicho", -- Nome do Blip
+        tableModel = "prop_astro_table_01", -- Modelo da mesa
+        tableOffset = vector3(0.0, 1.0, 0.0) -- Posição da mesa em relação ao NPC
     },
     {
         position = vector3(300.0, -500.0, 43.35), -- Outra posição
         model = "g_m_importexport_01", -- Outro modelo de NPC
-        blipName = "Jogo do Bicho" -- Nome do Blip
+        heading = 337.0, -- Rotação do NPC
+        blipName = "Jogo do Bicho", -- Nome do Blip
+        tableModel = "prop_astro_table_01", -- Modelo da mesa
+        tableOffset = vector3(0.0, 1.0, 0.0) -- Posição da mesa em relação ao NPC
+    },
+    {
+        position = vector3(-2570.28, 2789.27, 3.6), -- Outra posição
+        model = "a_m_m_golfer_01", -- Outro modelo de NPC
+        heading = 337.0, -- Rotação do NPC
+        blipName = "Jogo do Bicho", -- Nome do Blip
+        tableModel = "prop_astro_table_01", -- Modelo da mesa
+        tableOffset = vector3(0.0, 1.0, 0.0) -- Posição da mesa em relação ao NPC
     }
 }
 
 local isNearNPC = false -- Para evitar múltiplas interações
 
--- Criação dos NPCs e Blips
+-- Criação dos NPCs, Mesas e Blips
 Citizen.CreateThread(function()
     for _, npcData in ipairs(npcs) do
         -- Criar o blip
@@ -44,10 +58,22 @@ Citizen.CreateThread(function()
             Wait(10)
         end
 
-        local npc = CreatePed(4, model, npcData.position.x, npcData.position.y, npcData.position.z - 1, 3374176.0, false, true)
+        local npc = CreatePed(4, model, npcData.position.x, npcData.position.y, npcData.position.z - 1, npcData.heading, false, true)
         SetEntityInvincible(npc, true) -- NPC não pode ser morto
         SetBlockingOfNonTemporaryEvents(npc, true)
         FreezeEntityPosition(npc, true) -- NPC não se move
+
+        -- Criar a mesa
+        local tableModel = GetHashKey(npcData.tableModel)
+        RequestModel(tableModel)
+        while not HasModelLoaded(tableModel) do
+            Wait(10)
+        end
+
+        local tablePosition = GetOffsetFromEntityInWorldCoords(npc, npcData.tableOffset.x, npcData.tableOffset.y, npcData.tableOffset.z)
+        local table = CreateObject(tableModel, tablePosition.x, tablePosition.y, tablePosition.z - 1, false, true, false)
+        SetEntityHeading(table, GetEntityHeading(npc))
+        FreezeEntityPosition(table, true) -- Congelar a mesa no lugar
     end
 end)
 
