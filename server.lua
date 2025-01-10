@@ -45,11 +45,18 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
 
             -- Sorteio de 3 bichos diferentes
             local sorteados = {}
-            while #sorteados < 3 do
-                local sorteio = math.random(1, 25)
-                if not table.includes(sorteados, sorteio) then
-                    table.insert(sorteados, sorteio)
-                end
+            local indicesDisponiveis = {}
+
+            -- Preenche uma tabela com todos os índices possíveis
+            for i = 1, 25 do
+                table.insert(indicesDisponiveis, i)
+            end
+
+            -- Realiza o sorteio garantindo que sejam únicos
+            for i = 1, 3 do
+                local randomIndex = math.random(1, #indicesDisponiveis)
+                local sorteio = table.remove(indicesDisponiveis, randomIndex) -- Remove do array disponível
+                table.insert(sorteados, sorteio)
             end
 
             -- Enviar os bichos sorteados para a animação no cliente
