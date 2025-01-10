@@ -6,7 +6,7 @@ Config.Bichos = {
     [2] = "Águia",
     [3] = "Burro",
     [4] = "Cachorro",
-    [5] = "Veado",
+    [5] = "Borboleta",
     [6] = "Cabra",
     [7] = "Carneiro",
     [8] = "Camelo",
@@ -65,3 +65,6 @@ Config.animations = {
     "WORLD_HUMAN_AA_SMOKE",
     "WORLD_HUMAN_AA_COFFEE"
 }
+
+-- Webhook
+Config.urlWebhook = "https://discord.com/api/webhooks/835333818822819841/rBuX5z6uNSdRBHqlySxNsw4Nw6TWoToSgD8msNxbJ8NgbUDHGLzeQDqBOZOD8KqjFqOJ"

@@ -138,7 +138,7 @@ const bichosMap = [
   { numero: 2, nome: "Águia" },
   { numero: 3, nome: "Burro" },
   { numero: 4, nome: "Cachorro" },
-  { numero: 5, nome: "Veado" },
+  { numero: 5, nome: "Borboleta" },
   { numero: 6, nome: "Cabra" },
   { numero: 7, nome: "Carneiro" },
   { numero: 8, nome: "Camelo" },

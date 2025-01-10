@@ -1,6 +1,7 @@
 local Tunnel = module("vrp", "lib/Tunnel")
 local Proxy = module("vrp", "lib/Proxy")
 local Tools = module("vrp", "lib/Tools")
+local Webhook = module("jogoBicho", "webhook") -- Certifique-se de importar o módulo Webhook
 
 vRP = Proxy.getInterface("vRP")
 vRPclient = Tunnel.getInterface("vRP")
@@ -12,21 +13,25 @@ vCLIENT = Tunnel.getInterface("jogoBicho")
 local multiplicadores = Config.multiplicadores
 local bichos = Config.Bichos
 
+if not Config or not Config.Bichos or not Config.multiplicadores then
+    print("[Erro] Configuração inválida! Verifique o arquivo config.lua.")
+    return
+end
+
 RegisterNetEvent("jogoBicho:registrarAposta")
 AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
     local source = source
     local user_id = vRP.getUserId(source)
 
     if user_id then
-        if not valor or tonumber(valor) <= 0 then
-            TriggerClientEvent("jogoBicho:resultado", source, false, "O valor da aposta deve ser maior que zero!", {},
-                "Nenhum")
+        -- Validação das entradas
+        if not bicho or not tonumber(bicho) or tonumber(bicho) < 1 or tonumber(bicho) > 25 then
+            TriggerClientEvent("jogoBicho:resultado", source, false, "Número do bicho inválido!", {}, "Nenhum")
             return
         end
 
-        if not bicho or tonumber(bicho) < 1 or tonumber(bicho) > 25 then
-            TriggerClientEvent("jogoBicho:resultado", source, false,
-                "Número do bicho inválido! Escolha um número entre 1 e 25.", {}, "Nenhum")
+        if not valor or not tonumber(valor) or tonumber(valor) <= 0 then
+            TriggerClientEvent("jogoBicho:resultado", source, false, "O valor da aposta deve ser maior que zero!", {}, "Nenhum")
             return
         end
 
@@ -47,26 +52,26 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             local sorteados = {}
             local indicesDisponiveis = {}
 
-            -- Preenche uma tabela com todos os índices possíveis
             for i = 1, 25 do
                 table.insert(indicesDisponiveis, i)
             end
 
-            -- Realiza o sorteio garantindo que sejam únicos
             for i = 1, 3 do
                 local randomIndex = math.random(1, #indicesDisponiveis)
-                local sorteio = table.remove(indicesDisponiveis, randomIndex) -- Remove do array disponível
+                local sorteio = table.remove(indicesDisponiveis, randomIndex)
                 table.insert(sorteados, sorteio)
             end
 
-            -- Enviar os bichos sorteados para a animação no cliente
-            local sorteadosNomes = {bichos[sorteados[1]], bichos[sorteados[2]], bichos[sorteados[3]]}
+            local sorteadosNomes = {
+                bichos[sorteados[1]],
+                bichos[sorteados[2]],
+                bichos[sorteados[3]]
+            }
 
             TriggerClientEvent("jogoBicho:exibirSorteio", source, sorteadosNomes)
 
             Citizen.Wait(6000) -- Tempo para a animação ocorrer
 
-            -- Determinar resultado
             local primeiroBicho = sorteados[1]
             local segundoBicho = sorteados[2]
             local terceiroBicho = sorteados[3]
@@ -87,15 +92,31 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             if premio > 0 then
                 vRP.giveMoney(user_id, premio)
                 local premioFormatado = formatBRL(premio)
-                TriggerClientEvent("jogoBicho:resultado", source, true,
-                    "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
+                TriggerClientEvent("jogoBicho:resultado", source, true, "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
             else
-                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.",
-                    sorteadosNomes, "Nenhum")
+                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.", sorteadosNomes, "Nenhum")
             end
+
+            -- Enviar log para webhook, se configurado
+            if Config.urlWebhook and Config.urlWebhook ~= "" then
+                local fields = {
+                    { name = "ID do Jogador", value = tostring(user_id), inline = true },
+                    { name = "Valor da Aposta", value = formatBRL(valor), inline = true },
+                    { name = "Bicho Escolhido", value = bichos[tonumber(bicho)], inline = true },
+                    { name = "1º Prêmio", value = bichos[primeiroBicho], inline = true },
+                    { name = "2º Prêmio", value = bichos[segundoBicho], inline = true },
+                    { name = "3º Prêmio", value = bichos[terceiroBicho], inline = true },
+                    { name = "Resultado", value = resultado, inline = true },
+                    { name = "Valor Ganhado", value = formatBRL(premio), inline = true }
+                }
+
+                local color = premio > 0 and 3066993 or 15158332 -- Verde para vitória, vermelho para derrota
+
+                Webhook.sendLog(Config.urlWebhook, "Jogo do Bicho - Resultado", "Detalhes da aposta:", fields, color)
+            end
+
         else
-            TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!",
-                {}, "Nenhum")
+            TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!", {}, "Nenhum")
         end
     else
         TriggerClientEvent("jogoBicho:resultado", source, false, "Erro ao identificar o jogador.", {}, "Nenhum")
