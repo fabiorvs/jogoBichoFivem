@@ -190,3 +190,11 @@ function DrawText3D(x, y, z, text)
         DrawText(_x, _y)
     end
 end
+
+RegisterNetEvent("jogoBicho:exibirSorteio")
+AddEventHandler("jogoBicho:exibirSorteio", function(premios)
+    SendNUIMessage({
+        action = "showAnimation",
+        prizes = premios
+    })
+end)

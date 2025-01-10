@@ -77,6 +77,18 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
                 end
             end
 
+            -- Enviar os bichos sorteados para a animação no cliente
+            local sorteadosNomes = {
+                bichos[sorteados[1]],
+                bichos[sorteados[2]],
+                bichos[sorteados[3]]
+            }
+
+            TriggerClientEvent("jogoBicho:exibirSorteio", source, sorteadosNomes)
+
+            Citizen.Wait(6000) -- Tempo para a animação ocorrer
+
+            -- Determinar resultado
             local primeiroBicho = sorteados[1]
             local segundoBicho = sorteados[2]
             local terceiroBicho = sorteados[3]
@@ -97,17 +109,9 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             if premio > 0 then
                 vRP.giveMoney(user_id, premio)
                 local premioFormatado = formatBRL(premio)
-                TriggerClientEvent("jogoBicho:resultado", source, true, "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, {
-                    bichos[primeiroBicho],
-                    bichos[segundoBicho],
-                    bichos[terceiroBicho]
-                }, resultado)
+                TriggerClientEvent("jogoBicho:resultado", source, true, "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
             else
-                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.", {
-                    bichos[primeiroBicho],
-                    bichos[segundoBicho],
-                    bichos[terceiroBicho]
-                }, "Nenhum")
+                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.", sorteadosNomes, "Nenhum")
             end
         else
             TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!", {}, "Nenhum")
