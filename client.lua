@@ -35,6 +35,15 @@ local npcs = {
     }
 }
 
+local animations = {
+    "WORLD_HUMAN_SMOKING",
+    "WORLD_HUMAN_CLIPBOARD",
+    "WORLD_HUMAN_STAND_IMPATIENT",
+    "WORLD_HUMAN_DRINKING",
+    "WORLD_HUMAN_AA_SMOKE",
+    "WORLD_HUMAN_AA_COFFEE"
+}
+
 local isNearNPC = false -- Para evitar múltiplas interações
 
 -- Criação dos NPCs, Mesas e Blips
@@ -62,6 +71,11 @@ Citizen.CreateThread(function()
         SetEntityInvincible(npc, true) -- NPC não pode ser morto
         SetBlockingOfNonTemporaryEvents(npc, true)
         FreezeEntityPosition(npc, true) -- NPC não se move
+
+         -- Selecionar uma animação aleatória
+         local randomAnimation = animations[math.random(1, #animations)]
+         -- Adicionar a animação ao NPC
+         TaskStartScenarioInPlace(npc, randomAnimation, 0, true)
 
         -- Criar a mesa
         local tableModel = GetHashKey(npcData.tableModel)
