@@ -25,3 +25,7 @@ Este é um recurso para servidores FiveM que implementa o clássico Jogo do Bich
 ![Print 3](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/3.png)
 
 ![Print 4](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/4.png)
+
+![Print 5](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/5.png)
+
+![Game](https://raw.githubusercontent.com/fabiorvs/jogoBichoFivem/refs/heads/main/prints/game.gif)
