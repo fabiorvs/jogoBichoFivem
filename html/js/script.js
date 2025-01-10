@@ -252,3 +252,81 @@ window.addEventListener("message", (event) => {
     showRotatingAnimation(event.data.prizes);
   }
 });
+
+// Evento para o botão "Exibir Histórico"
+document.getElementById("exibirHistorico").addEventListener("click", () => {
+  // Envia solicitação ao servidor para obter o histórico
+  fetch(`https://${GetParentResourceName()}/getHistorico`, { method: "POST" })
+    .then(() => {
+      console.log("Solicitação enviada ao servidor para obter histórico.");
+    })
+    .catch((error) => {
+      console.error("Erro ao solicitar histórico:", error);
+      Swal.fire({
+        title: "Erro",
+        text: "Ocorreu um problema ao solicitar o histórico.",
+        icon: "error",
+      });
+    });
+});
+
+// Receber histórico do servidor
+window.addEventListener("message", (event) => {
+  if (event.data.action === "historico") {
+    const data = event.data.data;
+    console.log(data); // Verificar os dados recebidos do servidor
+
+    const tableBody = document.querySelector("#historicoTable tbody");
+    tableBody.innerHTML = ""; // Limpa tabela
+
+    if (Array.isArray(data) && data.length > 0) {
+      data.forEach((entry) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+    <td>${new Date(entry.data_aposta).toLocaleDateString()}</td>
+    <td>${getBichoNome(entry.bicho_escolhido)}</td>
+    <td>${formatCurrency(entry.valor_aposta)}</td>
+    <td>${getBichoNome(entry.premio_1)}, ${getBichoNome(
+          entry.premio_2
+        )}, ${getBichoNome(entry.premio_3)}</td>
+    <td>${entry.resultado}</td>
+    <td>${formatCurrency(entry.valor_ganho)}</td>
+`;
+        tableBody.appendChild(row);
+      });
+    } else {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="5">Nenhum histórico encontrado.</td>`;
+      tableBody.appendChild(row);
+    }
+
+    // Alterna para o container do histórico
+    toggleContainers("historicoContainer");
+  }
+});
+
+// Voltar para tela de apostas
+document.getElementById("voltarAposta").addEventListener("click", () => {
+  toggleContainers("gameContainer");
+});
+
+// Função para alternar entre os containers
+function toggleContainers(containerToShow) {
+  document.getElementById("gameContainer").style.display = "none";
+  document.getElementById("historicoContainer").style.display = "none";
+  document.getElementById(containerToShow).style.display = "block";
+}
+
+// Função para formatar valores monetários
+function formatCurrency(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+}
+
+// Função para obter o nome do bicho pelo número
+function getBichoNome(numero) {
+  const bicho = bichosMap.find((b) => b.numero === parseInt(numero));
+  return bicho ? bicho.nome : "Desconhecido";
+}

@@ -118,6 +118,7 @@
         </div>
         <button id="apostar">Apostar</button>
         <div class="result" id="result"></div>
+        <button class="history-button" id="exibirHistorico">Histórico</button>
         <button class="exit-button" id="sair">Sair</button>
     </div>
 
@@ -137,6 +138,33 @@
                 <span>3º Prêmio</span>
             </div>
         </div>
+    </div>
+
+    <!-- Container de Histórico -->
+    <div class="container" id="historicoContainer" style="display: none;">
+        <h1>Histórico de Apostas</h1>
+        <div id="historicoContainer">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Bicho Escolhido</th>
+                  <th>Valor Apostado</th>
+                  <th>Prêmios</th>
+                  <th>Resultado</th>
+                  <th>Valor Ganho</th>
+                </tr>
+              </thead>
+            </table>
+            <div id="historicoTableWrapper">
+              <table id="historicoTable">
+                <tbody>
+                  <!-- Linhas do histórico serão adicionadas aqui -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <button id="voltarAposta">Voltar</button>
     </div>
 
     <script src="js/jquery.js"></script>

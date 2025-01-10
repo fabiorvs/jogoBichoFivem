@@ -1,3 +1,6 @@
+/* --------------------------- */
+/* Variáveis de Cores e Fonte */
+/* --------------------------- */
 :root {
     --primary-color: #4caf50;
     --secondary-color: #333;
@@ -7,6 +10,9 @@
     --font-family: 'Arial', sans-serif;
 }
 
+/* --------------------------- */
+/* Estilo Global */
+/* --------------------------- */
 body {
     margin: 0;
     font-family: var(--font-family);
@@ -19,6 +25,9 @@ body {
     overflow: hidden;
 }
 
+/* --------------------------- */
+/* Container Geral */
+/* --------------------------- */
 .container {
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,6 +43,9 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* --------------------------- */
+/* Botões dos Bichos */
+/* --------------------------- */
 .bicho-container {
     display: flex;
     flex-wrap: wrap;
@@ -80,6 +92,9 @@ h1 {
     background-color: var(--selected-color);
 }
 
+/* --------------------------- */
+/* Campos de Entrada */
+/* --------------------------- */
 .input-group {
     margin-top: 20px;
 }
@@ -93,6 +108,9 @@ input[type="text"] {
     box-sizing: border-box;
 }
 
+/* --------------------------- */
+/* Botões Gerais */
+/* --------------------------- */
 button {
     margin-top: 15px;
     background-color: var(--primary-color);
@@ -109,12 +127,6 @@ button:hover {
     background-color: var(--button-hover-color);
 }
 
-.result {
-    margin-top: 20px;
-    font-size: 18px;
-    color: var(--secondary-color);
-}
-
 .exit-button {
     background-color: #ff4c4c;
     margin-top: 20px;
@@ -124,6 +136,26 @@ button:hover {
     background-color: #e63939;
 }
 
+/* Botão para Voltar */
+button#voltarAposta {
+    margin-top: 20px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button#voltarAposta:hover {
+    background-color: var(--button-hover-color);
+}
+
+/* --------------------------- */
+/* Animação de Prêmios */
+/* --------------------------- */
 .animation-container {
     display: none;
     position: fixed;
@@ -165,4 +197,89 @@ button:hover {
     color: #fff;
     text-align: center;
     font-weight: bold;
+}
+
+/* --------------------------- */
+/* Histórico de Apostas */
+/* --------------------------- */
+#historicoContainer {
+    width: 95%; /* Aumentada a largura */
+    max-width: 1200px; /* Largura máxima */
+    margin: 0 auto; /* Centraliza o contêiner */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    overflow: hidden;
+}
+
+#historicoContainer table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Força largura fixa das colunas */
+}
+
+#historicoContainer thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-color); /* Cor do cabeçalho */
+    color: var(--text-color); /* Cor do texto */
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    z-index: 1;
+    border-bottom: 2px solid #ddd;
+}
+
+#historicoContainer tbody {
+    display: block;
+    max-height: 400px; /* Altura máxima ajustada */
+    overflow-y: auto; /* Somente rolagem vertical */
+    overflow-x: hidden;
+}
+
+#historicoContainer tbody td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    word-wrap: break-word; /* Permite quebra de linha */
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#historicoContainer tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#historicoContainer tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#historicoContainer tbody tr:hover {
+    background-color: var(--button-hover-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#historicoContainer thead tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Barra de Rolagem Personalizada */
+#historicoContainer tbody::-webkit-scrollbar {
+    width: 10px;
+}
+
+#historicoContainer tbody::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+}
+
+#historicoContainer tbody::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
 }

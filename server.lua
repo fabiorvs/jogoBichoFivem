@@ -1,7 +1,8 @@
 local Tunnel = module("vrp", "lib/Tunnel")
 local Proxy = module("vrp", "lib/Proxy")
 local Tools = module("vrp", "lib/Tools")
-local Webhook = module("jogoBicho", "webhook") -- Certifique-se de importar o módulo Webhook
+local Webhook = module("jogoBicho", "webhook") -- Importar o módulo Webhook
+local Historico = module("jogoBicho", "historico") -- Importar o módulo Historico
 
 vRP = Proxy.getInterface("vRP")
 vRPclient = Tunnel.getInterface("vRP")
@@ -31,7 +32,8 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
         end
 
         if not valor or not tonumber(valor) or tonumber(valor) <= 0 then
-            TriggerClientEvent("jogoBicho:resultado", source, false, "O valor da aposta deve ser maior que zero!", {}, "Nenhum")
+            TriggerClientEvent("jogoBicho:resultado", source, false, "O valor da aposta deve ser maior que zero!", {},
+                "Nenhum")
             return
         end
 
@@ -62,11 +64,7 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
                 table.insert(sorteados, sorteio)
             end
 
-            local sorteadosNomes = {
-                bichos[sorteados[1]],
-                bichos[sorteados[2]],
-                bichos[sorteados[3]]
-            }
+            local sorteadosNomes = {bichos[sorteados[1]], bichos[sorteados[2]], bichos[sorteados[3]]}
 
             TriggerClientEvent("jogoBicho:exibirSorteio", source, sorteadosNomes)
 
@@ -87,28 +85,58 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             elseif tonumber(bicho) == terceiroBicho then
                 premio = valor * multiplicadores[3]
                 resultado = "Terceiro Prêmio"
+            else
+                resultado = "Nenhum"
             end
+            print(resultado)
+            -- Registrar histórico no banco de dados
+            Historico.registrarAposta(user_id, tonumber(bicho), valor, sorteados, resultado, premio)
 
             if premio > 0 then
                 vRP.giveMoney(user_id, premio)
                 local premioFormatado = formatBRL(premio)
-                TriggerClientEvent("jogoBicho:resultado", source, true, "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
+                TriggerClientEvent("jogoBicho:resultado", source, true,
+                    "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
             else
-                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.", sorteadosNomes, "Nenhum")
+                TriggerClientEvent("jogoBicho:resultado", source, false, "Que pena! Você não ganhou desta vez.",
+                    sorteadosNomes, "Nenhum")
             end
 
             -- Enviar log para webhook, se configurado
             if Config.urlWebhook and Config.urlWebhook ~= "" then
-                local fields = {
-                    { name = "ID do Jogador", value = tostring(user_id), inline = true },
-                    { name = "Valor da Aposta", value = formatBRL(valor), inline = true },
-                    { name = "Bicho Escolhido", value = bichos[tonumber(bicho)], inline = true },
-                    { name = "1º Prêmio", value = bichos[primeiroBicho], inline = true },
-                    { name = "2º Prêmio", value = bichos[segundoBicho], inline = true },
-                    { name = "3º Prêmio", value = bichos[terceiroBicho], inline = true },
-                    { name = "Resultado", value = resultado, inline = true },
-                    { name = "Valor Ganhado", value = formatBRL(premio), inline = true }
-                }
+                local fields = {{
+                    name = "ID do Jogador",
+                    value = tostring(user_id),
+                    inline = true
+                }, {
+                    name = "Valor da Aposta",
+                    value = formatBRL(valor),
+                    inline = true
+                }, {
+                    name = "Bicho Escolhido",
+                    value = bichos[tonumber(bicho)],
+                    inline = true
+                }, {
+                    name = "1º Prêmio",
+                    value = bichos[primeiroBicho],
+                    inline = true
+                }, {
+                    name = "2º Prêmio",
+                    value = bichos[segundoBicho],
+                    inline = true
+                }, {
+                    name = "3º Prêmio",
+                    value = bichos[terceiroBicho],
+                    inline = true
+                }, {
+                    name = "Resultado",
+                    value = resultado,
+                    inline = true
+                }, {
+                    name = "Valor Ganhado",
+                    value = formatBRL(premio),
+                    inline = true
+                }}
 
                 local color = premio > 0 and 3066993 or 15158332 -- Verde para vitória, vermelho para derrota
 
@@ -116,12 +144,36 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             end
 
         else
-            TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!", {}, "Nenhum")
+            TriggerClientEvent("jogoBicho:resultado", source, false, "Você não tem dinheiro suficiente para apostar!",
+                {}, "Nenhum")
         end
     else
         TriggerClientEvent("jogoBicho:resultado", source, false, "Erro ao identificar o jogador.", {}, "Nenhum")
     end
 end)
+
+RegisterNetEvent("jogoBicho:getHistorico")
+AddEventHandler("jogoBicho:getHistorico", function()
+    local source = source
+    local user_id = vRP.getUserId(source)
+
+    if user_id then
+        -- Delegar a consulta ao módulo historico.lua
+        local resultado = Historico.buscarHistorico(user_id)
+
+        if resultado and #resultado > 0 then
+            -- Enviar o histórico no formato JSON
+            TriggerClientEvent("jogoBicho:receberHistorico", source, resultado)
+        else
+            -- Enviar uma lista vazia para o cliente
+            TriggerClientEvent("jogoBicho:receberHistorico", source, {})
+        end
+    else
+        -- Enviar uma lista vazia caso o jogador não seja encontrado
+        TriggerClientEvent("jogoBicho:receberHistorico", source, {})
+    end
+end)
+
 
 function formatBRL(value)
     local formatted = string.format("%.2f", value)

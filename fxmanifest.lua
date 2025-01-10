@@ -4,7 +4,7 @@ lua54 'yes'
 
 author 'Fabio'
 
-shared_script {'config.lua', 'webhook.lua'}
+shared_script {'config.lua', 'webhook.lua', 'historico.lua'}
 
 client_scripts {'@vrp/lib/utils.lua', 'client.lua'}
 

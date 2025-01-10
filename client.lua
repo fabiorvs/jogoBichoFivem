@@ -172,3 +172,17 @@ AddEventHandler("jogoBicho:exibirSorteio", function(premios)
         prizes = premios
     })
 end)
+
+-- Receber histórico do servidor
+RegisterNUICallback("getHistorico", function(data, cb)
+    TriggerServerEvent("jogoBicho:getHistorico")
+    cb("ok")
+end)
+
+RegisterNetEvent("jogoBicho:receberHistorico")
+AddEventHandler("jogoBicho:receberHistorico", function(resultado)
+    SendNUIMessage({
+        action = "historico",
+        data = resultado
+    })
+end)
