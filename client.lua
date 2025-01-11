@@ -22,7 +22,7 @@ Citizen.CreateThread(function()
         local blip = AddBlipForCoord(npcData.position)
         SetBlipSprite(blip, 605) -- Ícone de apostas
         SetBlipDisplay(blip, 4)
-        SetBlipScale(blip, 0.9)
+        SetBlipScale(blip, 0.6)
         SetBlipColour(blip, 2) -- Verde
         SetBlipAsShortRange(blip, true)
         BeginTextCommandSetBlipName("STRING")
