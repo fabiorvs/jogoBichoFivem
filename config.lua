@@ -57,9 +57,9 @@ Config.npcs = {
         tableOffset = vector3(0.0, 1.0, 0.0) -- Posição relativa da mesa
     },
     {
-        position = vector3(300.0, -500.0, 43.35), -- Coordenadas do NPC
-        model = "g_m_importexport_01", -- Modelo do NPC
-        heading = 337.0, -- Rotação do NPC
+        position = vector3( 959.73, 3615.68, 32.72), -- Coordenadas do NPC
+        model = "u_m_m_partytarget", -- Modelo do NPC
+        heading = 90.0, -- Rotação do NPC
         blipName = "Jogo do Bicho", -- Nome do Blip no mapa
         tableModel = "prop_astro_table_01", -- Modelo da mesa
         tableOffset = vector3(0.0, 1.0, 0.0) -- Posição relativa da mesa
