@@ -10,7 +10,7 @@ INSERT INTO jogobicho_saldo (saldo) VALUES (1000000.00);
 
 CREATE TABLE jogobicho_historico_transacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,        -- Identificador único da transação
-    tipo_transacao ENUM('aposta', 'premio', 'outros') NOT NULL, -- Tipo de transação
+    tipo_transacao VARCHAR(255) NOT NULL, -- Tipo de transação
     valor DECIMAL(10, 2) NOT NULL,            -- Valor da transação
     descricao VARCHAR(255) DEFAULT NULL,      -- Descrição opcional
     data_transacao DATETIME NOT NULL DEFAULT NOW(), -- Data e hora da transação

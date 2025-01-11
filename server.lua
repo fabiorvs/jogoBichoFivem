@@ -182,6 +182,71 @@ AddEventHandler("jogoBicho:getHistorico", function()
     end
 end)
 
+-- Comando para setar um novo dono
+RegisterCommand("setdonobicho", function(source, args)
+    local user_id = vRP.getUserId(source)
+    if user_id and vRP.hasPermission(user_id, "admin.permissao") then
+        local novo_user_id = tonumber(args[1])
+        if novo_user_id then
+            -- Atualizar o dono atual
+            vRP._execute("jogoBicho/unset_dono_atual")
+            vRP._execute("jogoBicho/set_novo_dono", {
+                user_id = novo_user_id
+            })
+
+            TriggerClientEvent("Notify", source, "sucesso", "Novo dono do jogo do bicho setado com sucesso.")
+        else
+            TriggerClientEvent("Notify", source, "negado", "Você deve fornecer um ID válido.")
+        end
+    else
+        TriggerClientEvent("Notify", source, "negado", "Você não tem permissão para executar este comando.")
+    end
+end)
+
+-- Comando para atualizar o saldo
+RegisterCommand("setsaldobicho", function(source, args)
+    local user_id = vRP.getUserId(source)
+    if user_id and vRP.hasPermission(user_id, "admin.permissao") then
+        local novo_saldo = tonumber(args[1])
+        if novo_saldo then
+            vRP._execute("jogoBicho/update_saldo", {
+                saldo = novo_saldo
+            })
+            -- Registrar a transação no histórico de transações
+            vRP._execute("jogoBicho/insert_transacao", {
+                tipo_transacao = "ajuste",
+                valor = novo_saldo,
+                descricao = string.format("Admin %d ajustou o saldo.", user_id)
+            })
+            TriggerClientEvent("Notify", source, "sucesso", "Saldo atualizado com sucesso.")
+        else
+            TriggerClientEvent("Notify", source, "negado", "Você deve fornecer um valor válido.")
+        end
+    else
+        TriggerClientEvent("Notify", source, "negado", "Você não tem permissão para executar este comando.")
+    end
+end)
+
+-- Comando para verificar o dono e saldo atual
+RegisterCommand("verbicho", function(source)
+    local user_id = vRP.getUserId(source)
+    if user_id and vRP.hasPermission(user_id, "admin.permissao") then
+        local resultado_dono = vRP.query("jogoBicho/get_dono_atual")
+        local resultado_saldo = vRP.query("jogoBicho/get_saldo_atual")
+
+        if #resultado_dono > 0 and #resultado_saldo > 0 then
+            local dono_atual = resultado_dono[1].user_id
+            local saldo_atual = resultado_saldo[1].saldo
+            TriggerClientEvent("Notify", source, "importante",
+                string.format("Dono atual: %d | Saldo atual: %s", dono_atual, formatBRL(saldo_atual)))
+        else
+            TriggerClientEvent("Notify", source, "negado", "Informações do dono ou saldo não encontradas.")
+        end
+    else
+        TriggerClientEvent("Notify", source, "negado", "Você não tem permissão para executar este comando.")
+    end
+end)
+
 -- Função para atualizar o saldo global do jogo
 function atualizarSaldo(valor)
     vRP._prepare("jogoBicho/update_saldo", [[
