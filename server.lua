@@ -3,6 +3,7 @@ local Proxy = module("vrp", "lib/Proxy")
 local Tools = module("vrp", "lib/Tools")
 local Webhook = module("jogoBicho", "webhook") -- Importar o módulo Webhook
 local Historico = module("jogoBicho", "historico") -- Importar o módulo Historico
+local Transacoes = module("jogoBicho", "transacoes") -- Importar o módulo Transações
 
 vRP = Proxy.getInterface("vRP")
 vRPclient = Tunnel.getInterface("vRP")
@@ -50,11 +51,14 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
                 vRP.setBankMoney(user_id, bank - restante)
             end
 
+            -- Adicionar o valor da aposta ao saldo
+            Transacoes.registrarTransacao("aposta", valor, "Aposta registrada pelo jogador")
+
             -- Sorteio de 3 bichos diferentes
             local sorteados = {}
             local indicesDisponiveis = {}
 
-            for i = 1, 25 do
+            for i = 1, 3 do
                 table.insert(indicesDisponiveis, i)
             end
 
@@ -88,12 +92,16 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             else
                 resultado = "Nenhum"
             end
-            print(resultado)
+
             -- Registrar histórico no banco de dados
             Historico.registrarAposta(user_id, tonumber(bicho), valor, sorteados, resultado, premio)
 
             if premio > 0 then
                 vRP.giveMoney(user_id, premio)
+
+                -- Retirar o valor do prêmio do saldo
+                Transacoes.registrarTransacao("premio", -premio, "Pagamento de prêmio ao jogador")
+
                 local premioFormatado = formatBRL(premio)
                 TriggerClientEvent("jogoBicho:resultado", source, true,
                     "Você ganhou no " .. resultado .. "! <br>Prêmio: " .. premioFormatado, sorteadosNomes, resultado)
@@ -174,6 +182,19 @@ AddEventHandler("jogoBicho:getHistorico", function()
     end
 end)
 
+-- Função para atualizar o saldo global do jogo
+function atualizarSaldo(valor)
+    vRP._prepare("jogoBicho/update_saldo", [[
+                UPDATE jogobicho_saldo
+                SET saldo = saldo + @valor,
+                    atualizado_em = NOW()
+                WHERE id = 1
+            ]])
+
+    vRP._execute("jogoBicho/update_saldo", {
+        valor = valor
+    })
+end
 
 function formatBRL(value)
     local formatted = string.format("%.2f", value)
@@ -191,3 +212,4 @@ function table.includes(tbl, value)
     end
     return false
 end
+
