@@ -58,7 +58,7 @@ AddEventHandler("jogoBicho:registrarAposta", function(bicho, valor)
             local sorteados = {}
             local indicesDisponiveis = {}
 
-            for i = 1, 3 do
+            for i = 1, 25 do
                 table.insert(indicesDisponiveis, i)
             end
 
