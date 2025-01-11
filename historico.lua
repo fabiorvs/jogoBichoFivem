@@ -44,7 +44,6 @@ vRP._prepare("jogoBicho/insert_transacao", [[
 
 -- Função para registrar uma aposta no histórico
 function Historico.registrarAposta(user_id, bicho_escolhido, valor_aposta, premios, resultado, valor_ganho)
-    print(valor_ganho)
     if not user_id or not bicho_escolhido or not valor_aposta or not premios or not valor_ganho then
         print("[Erro] Dados insuficientes para registrar aposta no histórico.")
         return
