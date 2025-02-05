@@ -2,11 +2,17 @@
 /* Variáveis de Cores e Fonte */
 /* --------------------------- */
 :root {
-    --primary-color: #4caf50;
+    --primary-color: #2c58f9;
     --secondary-color: #333;
-    --button-hover-color: #45a049;
+    --button-hover-color: #4971ff;
     --selected-color: #ffa500;
     --text-color: #fff;
+    --text-primary: #FFFFFF;
+    --text-secondary: #8F8F9B;
+    --panel-bg: #1f1f2c;
+    --item-bg: #343435;
+    --hover-bg: #1A1A23;
+    --border-color: rgba(79, 110, 247, 0.2);
     --font-family: 'Arial', sans-serif;
 }
 
@@ -29,9 +35,9 @@ body {
 /* Container Geral */
 /* --------------------------- */
 .container {
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    background: var(--panel-bg);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     padding: 20px;
     width: 90%;
     max-width: 600px;
@@ -39,7 +45,7 @@ body {
 }
 
 h1 {
-    color: var(--primary-color);
+    color: var(--text-primary);
     margin-bottom: 20px;
 }
 
@@ -54,7 +60,7 @@ h1 {
 }
 
 .bicho-button {
-    background-color: var(--primary-color);
+    background-color: var(--text-secondary);
     color: var(--text-color);
     border: none;
     padding: 10px;
@@ -203,26 +209,26 @@ button#voltarAposta:hover {
 /* Histórico de Apostas */
 /* --------------------------- */
 #historicoContainer {
-    width: 95%; /* Aumentada a largura */
-    max-width: 1200px; /* Largura máxima */
-    margin: 0 auto; /* Centraliza o contêiner */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: white;
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    background-color: var(--panel-bg);
     overflow: hidden;
 }
 
 #historicoContainer table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Força largura fixa das colunas */
+    table-layout: fixed;
 }
 
 #historicoContainer thead th {
     position: sticky;
     top: 0;
-    background-color: var(--primary-color); /* Cor do cabeçalho */
-    color: var(--text-color); /* Cor do texto */
+    background-color: var(--item-bg);
+    color: var(--text-color);
     font-weight: bold;
     padding: 12px;
     text-align: center;
@@ -232,8 +238,9 @@ button#voltarAposta:hover {
 
 #historicoContainer tbody {
     display: block;
-    max-height: 400px; /* Altura máxima ajustada */
-    overflow-y: auto; /* Somente rolagem vertical */
+    background-color: var(--secondary-color);
+    max-height: 400px;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
@@ -242,9 +249,10 @@ button#voltarAposta:hover {
     text-align: center;
     border: 1px solid #ddd;
     font-size: 14px;
-    word-wrap: break-word; /* Permite quebra de linha */
+    word-wrap: break-word;
     text-overflow: ellipsis;
     overflow: hidden;
+    color: #fff;
 }
 
 #historicoContainer tbody tr {
@@ -258,7 +266,7 @@ button#voltarAposta:hover {
 }
 
 #historicoContainer tbody tr:hover {
-    background-color: var(--button-hover-color);
+    background-color: var(--hover-bg);
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
